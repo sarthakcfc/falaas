@@ -17,6 +17,7 @@ namespace falaas
                 //the inner loop variable serves as the suit number that gets passed in.
                 for (int j = 1; j <= 4; j++)
                 {
+                    //These staements will print out the deck into the console.
                     Deck d = new Deck(i - 1, j - 1);
                     Cards c = new Cards(d.getRank(), d.getSuit());
                     Console.WriteLine(c.print());
@@ -25,6 +26,8 @@ namespace falaas
            
             
         }
+    }
+}
     }
 }
 
