@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +11,7 @@ namespace falaas
         public String rank { get; set; }
         public String suit { get; set; }
 
+
         public Cards(String rank, String suit)
         {
             this.rank = rank;
@@ -19,6 +20,9 @@ namespace falaas
 
         public String print()
         {
+            //Precondition: Requires two strings to passed into the class.,
+            //Postcondition: concatenates the two strings in order to make a single card.
+
             return (this.rank + " of " + this.suit);
         }
     }
