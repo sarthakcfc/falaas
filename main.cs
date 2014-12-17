@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,8 +10,17 @@ namespace falaas
     {
         public static void Main()
         {
-            Cards c = new Cards("Ace", "Spades");
-            Console.WriteLine(c.print());
+            for (int i = 0; i < 13; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    Deck d = new Deck(i, j);
+                    Cards c = new Cards(d.getRank(), d.getSuit());
+                    Console.WriteLine(c.print());
+                }
+            }
+           
+            
         }
     }
 }
