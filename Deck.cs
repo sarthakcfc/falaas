@@ -18,7 +18,7 @@ namespace falaas
         public string getRank()
         {
             string[] ranks = { "Ace", "Two", "Three", "Four", "Five", "Six",
-                            "Seven", "Eight", "Nine", "Tent", "Jack", "Queen", "King"};
+                            "Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King"};
 
 
             return ranks[this.rank];
