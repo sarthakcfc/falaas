@@ -28,6 +28,10 @@ namespace falaas
             Console.WriteLine("Printing a Deck");
             Deck d = new Deck();
             Console.WriteLine(d.ToString());
+
+            Console.WriteLine("Shuffle Test");
+            d.shuffle();
+            Console.WriteLine(d.ToString());
              //   }
            // }
            
