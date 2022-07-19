@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace teen_patti.engine
+namespace teen_patti.common
 {
     public class Builder
     {
@@ -18,10 +19,6 @@ namespace teen_patti.engine
         public Move TransitionMove { get => _transitionMove; }
         public Player CurrentPlayer { get => _currentPlayer; }
 
-        public Builder()
-        {
-            this._deck = new List<Card>();
-        }
         public Builder InitDeck(Func<ICollection<Card>> deckBuilder)
         {
             this._deck = deckBuilder();
