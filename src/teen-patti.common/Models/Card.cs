@@ -40,6 +40,16 @@ namespace teen_patti.common
 
             return cards.Shuffle();
         }
+        public static ICollection<Card> CreateDeck(int numberOfDecks, bool shuffle)
+        {
+            var cards = new List<Card>();
+            for(int i = 0; i < numberOfDecks; i++)
+                foreach (CardRank cardRank in Enum.GetValues(typeof(CardRank)))
+                    foreach (CardSuit suit in Enum.GetValues(typeof(CardSuit)))
+                        cards.Add(new Card(cardRank, suit));
+
+            return shuffle ? cards.Shuffle() : cards;
+        }
 
         public override string ToString() => IsVisible ? _rank.ToFriendlyString() + " " + Suit.ToFriendlyString() : "*";
     }

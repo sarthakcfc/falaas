@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.Resource;
 using teen_patti.common;
@@ -32,11 +33,12 @@ app.UseAuthorization();
 
 var scopeRequiredByApi = app.Configuration["AzureAd:Scopes"];
 
-app.MapGet("teenpatti/init", (HttpContext httpContext) =>
+#region teen-patti
+app.MapPost("teenpatti/init", ([FromBody]ICollection<Card> deck) =>
 {
     Builder builder = new Builder();
     builder
-        .InitDeck(Card.NewTeenPattiDeck)
+        .AssignDeck(deck.ToList())
         .InitPlayers(Player.InitPlayers);
     return builder.Build().MapToView();
 })
@@ -56,6 +58,17 @@ app.MapPost("teenpatti/deal", (GameStateView view) =>
     return returnVal;
 })
 .WithName("Deal")
-.WithTags("TeenPatti"); ;
+.WithTags("TeenPatti");
+#endregion
+
+#region deck
+
+app.MapGet("deck/create", ([FromQuery] int count, [FromQuery] bool shuffle) =>
+{
+    return Card.CreateDeck(count, shuffle);
+})
+.WithName("DeckCreate")
+.WithTags("Deck");
+#endregion
 
 app.Run();

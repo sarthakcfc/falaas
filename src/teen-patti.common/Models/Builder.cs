@@ -24,6 +24,11 @@ namespace teen_patti.common
             this._deck = deckBuilder();
             return this;
         }
+        public Builder AssignDeck(ICollection<Card> deck)
+        {
+            this._deck = deck;
+            return this;
+        }
         public Builder InitPlayers(Func<ICollection<Player>> playerBuilder)
         {
             this._players = playerBuilder();
