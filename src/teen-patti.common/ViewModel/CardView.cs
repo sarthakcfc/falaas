@@ -12,4 +12,14 @@ namespace teen_patti.common
         public CardSuit Suit { get; set; }
         public bool IsVisible { get; set; }
     }
+    public static class CardViewExtensions
+    {
+        public static CardView MapToView(this Card card) => new CardView()
+        {
+            Rank = card.Rank,
+            Suit = card.Suit,
+            IsVisible = card.IsVisible,
+        };
+        public static Card MapToCard(this CardView view) => new Card(view);
+    }
 }

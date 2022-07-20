@@ -24,7 +24,7 @@ namespace teen_patti.common
         {
             Id = player.Id,
             Ordinal = player.Ordinal,
-            Hand = player.Hand.Select(x => new CardView()).ToList(),
+            Hand = player.Hand.Select(x => x.MapToView()).ToList(),
         };
         public static Player MapToPlayer(this PlayerView view) => new Player(view);
     }

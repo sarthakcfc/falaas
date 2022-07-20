@@ -12,6 +12,7 @@ namespace teen_patti.common
         private readonly CardRank _rank;
         private readonly CardSuit _suit;
         private bool _isVisible;
+
         public CardRank Rank { get => _rank; }
         public CardSuit Suit { get => _suit; }
         public bool IsVisible { get => _isVisible; set => _isVisible = value; }
@@ -21,6 +22,13 @@ namespace teen_patti.common
             _rank = cardRank;
             _suit = cardSuit;
             _isVisible = false;
+        }
+
+        public Card(CardView view)
+        {
+            _rank = view.Rank;
+            _suit = view.Suit;
+            _isVisible = view.IsVisible;
         }
 
         public static ICollection<Card> NewTeenPattiDeck()

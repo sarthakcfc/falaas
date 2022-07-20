@@ -28,10 +28,10 @@ namespace teen_patti.common
 
         public GameState(GameStateView view)
         {
-            this._deck = view.Deck.ToList();
-            this._players = view.Players.ToList();
-            this._transitionMove = view.TransitionMove ?? MoveFactory.GetNullMove();
-            this._currentPlayer = view.CurrentPlayer ?? throw new Exception("Current Player does not exist!");
+            this._deck = view.Deck.Select(x => x.MapToCard()).ToList();
+            this._players = view.Players.Select(x => x.MapToPlayer()).ToList(); ;
+            this._transitionMove = view.TransitionMove.MapToMove(this) ?? MoveFactory.GetNullMove(this);
+            this._currentPlayer = view.CurrentPlayer.MapToPlayer() ?? throw new Exception("Current Player does not exist!");
         }
         /// <summary>
         /// Consturctor
@@ -41,7 +41,7 @@ namespace teen_patti.common
         {
             this._deck = builder.Deck.ToList();
             this._players = builder.Players.ToList();
-            this._transitionMove = builder.TransitionMove ?? MoveFactory.GetNullMove();
+            this._transitionMove = builder.TransitionMove ?? MoveFactory.GetNullMove(this);
             this._currentPlayer = builder.CurrentPlayer;
         }
 

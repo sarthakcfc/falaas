@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Intrinsics.X86;
 using System.Text;
 using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 using System.Threading.Tasks;
-
 namespace teen_patti.common
 {
     public abstract class Move
     {
         protected readonly GameState _state;
 
+        public GameState State { get => _state; }
         public Move(GameState state) 
         {
             _state = state;
@@ -93,7 +95,7 @@ namespace teen_patti.common
     }
     public sealed class NullMove : Move
     {
-        public NullMove() : base(null)
+        public NullMove(GameState state) : base(state)
         {
         }
         public override GameState Execute()
@@ -103,10 +105,9 @@ namespace teen_patti.common
     }
     public static class MoveFactory
     {
-        public static readonly Move NULL_MOVE = new NullMove();
-        internal static Move GetNullMove()
+        internal static Move GetNullMove(GameState state)
         {
-            return NULL_MOVE;
+            return new NullMove(state);
         }
 
         public static Move CreateMove(GameState state, string input = "")

@@ -51,7 +51,8 @@ app.MapPost("teenpatti/dealtoplayers", (GameStateView view) =>
         var move = MoveFactory.CreateMove(state);
         state = move.Execute();
     }
-    return state;
+    var returnVal =  state.MapToView();
+    return returnVal;
 });
 
 app.Run();

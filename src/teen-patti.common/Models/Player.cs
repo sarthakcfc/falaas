@@ -32,7 +32,7 @@ namespace teen_patti.common
         {
             _ordinal = view.Ordinal;
             _id = view.Id;
-            _hand = view.Hand.Select(x => x.MapToCard());
+            _hand = view.Hand.Select(x => x.MapToCard()).ToList();
         }
         public Player(ICollection<Card> hand, int ordinal)
         {

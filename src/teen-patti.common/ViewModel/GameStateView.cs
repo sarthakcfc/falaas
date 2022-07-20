@@ -10,7 +10,7 @@ namespace teen_patti.common
 {
     public class GameStateView
     {
-        public ICollection<Card> Deck { get; set; }
+        public ICollection<CardView> Deck { get; set; }
         public ICollection<PlayerView> Players { get; set; }
         public MoveView TransitionMove { get; set; }
         public PlayerView CurrentPlayer { get; set; }
@@ -23,10 +23,12 @@ namespace teen_patti.common
     {
         public static GameStateView MapToView(this GameState state) => new GameStateView()
         {
-            Deck = state.Deck,
+            Deck = state.Deck.Select(x => x.MapToView()).ToList(),
             Players = state.Players.Select(x => x.MapToView()).ToList(),
-            TransitionMove = state.TransitionMove,
-            CurrentPlayer = state.CurrentPlayer
+            TransitionMove = state.TransitionMove.MapToView(),
+            CurrentPlayer = state.CurrentPlayer.MapToView()
         };
+        public static GameState MapToState(this GameStateView view) => new GameState(view);
+
     }
 }
