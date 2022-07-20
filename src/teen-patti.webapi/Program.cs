@@ -32,7 +32,7 @@ app.UseAuthorization();
 
 var scopeRequiredByApi = app.Configuration["AzureAd:Scopes"];
 
-app.MapGet("teenpatti/initgame", (HttpContext httpContext) =>
+app.MapGet("teenpatti/init", (HttpContext httpContext) =>
 {
     Builder builder = new Builder();
     builder
@@ -40,10 +40,11 @@ app.MapGet("teenpatti/initgame", (HttpContext httpContext) =>
         .InitPlayers(Player.InitPlayers);
     return builder.Build().MapToView();
 })
-.WithName("CreateTeenPattiBuilder");
+.WithName("Initiate")
+.WithTags("TeenPatti");
 //.RequireAuthorization();
 
-app.MapPost("teenpatti/dealtoplayers", (GameStateView view) =>
+app.MapPost("teenpatti/deal", (GameStateView view) =>
 {
     var state = new GameState(view);
     for (int i = 0; i < 6; i++)
@@ -53,11 +54,8 @@ app.MapPost("teenpatti/dealtoplayers", (GameStateView view) =>
     }
     var returnVal =  state.MapToView();
     return returnVal;
-});
+})
+.WithName("Deal")
+.WithTags("TeenPatti"); ;
 
 app.Run();
-
-internal record WeatherForecast(DateTime Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
