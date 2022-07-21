@@ -5,8 +5,9 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using teen_patti.common.Models.Engine;
 
-namespace teen_patti.common
+namespace teen_patti.common.Models.ViewModel
 {
     public class GameStateView
     {

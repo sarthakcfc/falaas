@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace teen_patti.common
+namespace teen_patti.common.Models.Engine
 {
     public class Builder
     {

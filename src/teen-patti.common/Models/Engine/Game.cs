@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace teen_patti.common
+namespace teen_patti.common.Models.Engine
 {
     public class Game
     {

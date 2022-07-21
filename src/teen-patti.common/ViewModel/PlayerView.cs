@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using teen_patti.common.Models.Engine;
 
-namespace teen_patti.common
+namespace teen_patti.common.Models.ViewModel
 {
     public class PlayerView
     {

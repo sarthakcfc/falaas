@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
 using System.Threading.Tasks;
-namespace teen_patti.common
+namespace teen_patti.common.Models.Engine
 {
     public abstract class Move
     {
