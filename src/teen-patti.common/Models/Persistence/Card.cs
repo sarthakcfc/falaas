@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using teen_patti.common.Models.Engine;
 
-namespace teen_patti.common.Models.ViewModel
+namespace teen_patti.common.Models.Persistence
 {
-    public class CardView
+    public class Card
     {
         public CardRank Rank { get; set; }
         public CardSuit Suit { get; set; }
@@ -15,12 +14,11 @@ namespace teen_patti.common.Models.ViewModel
     }
     public static class CardViewExtensions
     {
-        public static CardView MapToView(this Card card) => new CardView()
+        public static Card MapToPersistence(this Engine.Card card) => new Card()
         {
             Rank = card.Rank,
             Suit = card.Suit,
             IsVisible = card.IsVisible,
         };
-        public static Card MapToCard(this CardView view) => new Card(view);
     }
 }

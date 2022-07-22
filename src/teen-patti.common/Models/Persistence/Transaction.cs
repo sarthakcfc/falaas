@@ -11,6 +11,7 @@ namespace teen_patti.common.Models.Persistence
         public Guid Id { get; set; }
         public Guid SenderId { get; set; }
         public Guid ReceiverId { get; set; }
+        public string SenderType { get; set; }
         public DateTime TimeStampUTC { get; set; }
         public long Amount { get; set; }
     }

@@ -3,7 +3,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.Resource;
-using teen_patti.common;
+using teen_patti.service;
+using teen_patti.service.Interefaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +13,15 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
 builder.Services.AddAuthorization();
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+//Add Db
+builder.Services.AddDbContext<teen_patti.data.postgres.TeenPattiDbContext>();
+
+//Add dependencies
+builder.Services.AddScoped<IGameService, GameService>();
+builder.Services.AddScoped<ITransactionService, TransactionService>();
+builder.Services.AddScoped<IPlayerService, PlayerService>();
+
+// Add Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -34,38 +43,32 @@ app.UseAuthorization();
 var scopeRequiredByApi = app.Configuration["AzureAd:Scopes"];
 
 #region teen-patti
-app.MapPost("teenpatti/init", ([FromBody]ICollection<Card> deck) =>
-{
-    Builder builder = new Builder();
-    builder
-        .AssignDeck(deck.ToList())
-        .InitPlayers(Player.InitPlayers);
-    return builder.Build().MapToView();
-})
-.WithName("Initiate")
+app.MapPost("teenpatti/intiialize", 
+    ([FromBody]ICollection<teen_patti.common.Models.ViewModel.CardView> deck, IGameService service) => service.InitializeGame(deck, Guid.NewGuid())
+).WithName("Initialize")
 .WithTags("TeenPatti");
 //.RequireAuthorization();
 
-app.MapPost("teenpatti/deal", (GameStateView view) =>
-{
-    var state = new GameState(view);
-    for (int i = 0; i < 6; i++)
-    {
-        var move = MoveFactory.CreateMove(state);
-        state = move.Execute();
-    }
-    var returnVal =  state.MapToView();
-    return returnVal;
-})
-.WithName("Deal")
-.WithTags("TeenPatti");
+//app.MapPost("teenpatti/deal", (Guid gameStateId) =>
+//{
+//    var state = new GameState(view);
+//    for (int i = 0; i < 6; i++)
+//    {
+//        var move = MoveFactory.CreateMove(state);
+//        state = move.Execute();
+//    }
+//    var returnVal =  state.MapToView();
+//    return returnVal;
+//})
+//.WithName("Deal")
+//.WithTags("TeenPatti");
 #endregion
 
 #region deck
 
-app.MapGet("deck/create", ([FromQuery] int count, [FromQuery] bool shuffle) =>
+app.MapGet("deck/create", ([FromQuery] int count) =>
 {
-    return Card.CreateDeck(count, shuffle);
+    return teen_patti.common.Models.Engine.Card.CreateDeck(count);
 })
 .WithName("DeckCreate")
 .WithTags("Deck");

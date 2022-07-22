@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace teen_patti.common.Models.Persistence
 {
-    internal class Game
+    public class Game
     {
+        public Guid Id { get; set; }
+        public DateTime CreateDateUTC { get; set; }
+        public ICollection<GameState> States { get; set; }
     }
 }

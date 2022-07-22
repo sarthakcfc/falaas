@@ -24,24 +24,13 @@ namespace teen_patti.common.Models.Engine
             _suit = cardSuit;
             _isVisible = false;
         }
-
         public Card(CardView view)
         {
             _rank = view.Rank;
             _suit = view.Suit;
             _isVisible = view.IsVisible;
         }
-
-        public static ICollection<Card> NewTeenPattiDeck()
-        {
-            var cards = new List<Card>();
-            foreach (CardRank cardRank in Enum.GetValues(typeof(CardRank)))
-                foreach (CardSuit suit in Enum.GetValues(typeof(CardSuit)))
-                    cards.Add(new Card(cardRank, suit));
-
-            return cards.Shuffle();
-        }
-        public static ICollection<Card> CreateDeck(int numberOfDecks, bool shuffle)
+        public static ICollection<Card> CreateDeck(int numberOfDecks)
         {
             var cards = new List<Card>();
             for(int i = 0; i < numberOfDecks; i++)
@@ -49,26 +38,9 @@ namespace teen_patti.common.Models.Engine
                     foreach (CardSuit suit in Enum.GetValues(typeof(CardSuit)))
                         cards.Add(new Card(cardRank, suit));
 
-            return shuffle ? cards.Shuffle() : cards;
+            return cards;
         }
 
         public override string ToString() => IsVisible ? _rank.ToFriendlyString() + " " + Suit.ToFriendlyString() : "*";
-    }
-    public static class CardExtensions
-    {
-        private static Random rng = new Random();
-        public static ICollection<T> Shuffle<T>(this IList<T> list)
-        {
-            int n = list.Count;
-            while (n > 1)
-            {
-                n--;
-                int k = rng.Next(n + 1);
-                T value = list[k];
-                list[k] = list[n];
-                list[n] = value;
-            }
-            return list;
-        }
     }
 }

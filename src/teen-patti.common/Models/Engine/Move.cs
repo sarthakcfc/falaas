@@ -10,11 +10,14 @@ namespace teen_patti.common.Models.Engine
 {
     public abstract class Move
     {
+        protected readonly Guid _id;
         protected readonly GameState _state;
 
         public GameState State { get => _state; }
+        public Guid Id { get => _id; }
         public Move(GameState state) 
         {
+            _id = Guid.NewGuid();
             _state = state;
         }
 
@@ -38,14 +41,18 @@ namespace teen_patti.common.Models.Engine
             var deck = new Stack<Card>(_state.Deck);
             var players = _state.Players.ToList(); 
             var currentPlayer = _state.CurrentPlayer;
-
-            currentPlayer.AddToHand(deck.Pop());
-            players[currentPlayer.Ordinal - 1] = currentPlayer;
+            
+            var hand = currentPlayer.Hand;
+            hand.Add(deck.Pop());
+            var newPlayer = new Player(currentPlayer.Id, hand, currentPlayer.Ordinal);
+            
+            players[newPlayer.Ordinal - 1] = newPlayer;
 
             builder.SetCurrentPlayer(_state.GetNextPlayer());
             builder.SetDeck(deck.ToList());
             builder.SetPlayers(players);
             builder.SetMoveTransition(this);
+            
             return builder.Build();
         }
     }
@@ -79,9 +86,9 @@ namespace teen_patti.common.Models.Engine
             foreach (var card in hand)
                 card.IsVisible = true;
 
-            currentPlayer.SetHand(hand);
+            var newPlayer = new Player(currentPlayer.Id, hand, currentPlayer.Ordinal);
 
-            players[currentPlayer.Ordinal - 1] = currentPlayer;
+            players[newPlayer.Ordinal - 1] = newPlayer;
 
 
             //builder assignments

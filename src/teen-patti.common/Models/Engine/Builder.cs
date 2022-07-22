@@ -29,12 +29,6 @@ namespace teen_patti.common.Models.Engine
             this._deck = deck;
             return this;
         }
-        public Builder InitPlayers(Func<ICollection<Player>> playerBuilder)
-        {
-            this._players = playerBuilder();
-            this._currentPlayer = this._players.FirstOrDefault(x => x.Ordinal == 1) ?? throw new Exception("No players were given!");
-            return this;
-        }
         public Builder SetDeck(ICollection<Card> deck)
         {
             _deck = deck;
@@ -43,6 +37,11 @@ namespace teen_patti.common.Models.Engine
         public Builder SetPlayers(ICollection<Player> players)
         {
             _players = players;
+            return this;
+        }
+        public Builder AddPlayer(Player player)
+        {
+            _players.Add(player);
             return this;
         }
         public Builder SetCurrentPlayer(Player player)

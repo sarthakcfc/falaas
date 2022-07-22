@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using teen_patti.common.Models.Persistence;
 using teen_patti.common.Models.ViewModel;
 
 namespace teen_patti.common.Models.Engine
@@ -16,24 +17,21 @@ namespace teen_patti.common.Models.Engine
         private readonly IReadOnlyCollection<Card> _deck;
         private readonly IReadOnlyCollection<Player> _players;
         private readonly Player _currentPlayer;
-        private readonly Move _transitionMove;
+        private readonly Move? _transitionMove;
+        private readonly long _potAmount;
+        private readonly Guid _id;
 
 
         /// <summary>
         /// Public properties
         /// </summary>
         public Player CurrentPlayer { get => _currentPlayer; }
-        public Move TransitionMove { get => _transitionMove; }
+        public Move? TransitionMove { get => _transitionMove; }
         public ICollection<Card> Deck { get => _deck.ToList(); }
         public ICollection<Player> Players { get => _players.ToList(); }
+        public long PotAmount { get => _potAmount; }
+        public Guid Id { get=> _id; }
 
-        public GameState(GameStateView view)
-        {
-            this._deck = view.Deck.Select(x => x.MapToCard()).ToList();
-            this._players = view.Players.Select(x => x.MapToPlayer()).ToList(); ;
-            this._transitionMove = view.TransitionMove.MapToMove(this) ?? MoveFactory.GetNullMove(this);
-            this._currentPlayer = view.CurrentPlayer.MapToPlayer() ?? throw new Exception("Current Player does not exist!");
-        }
         /// <summary>
         /// Consturctor
         /// </summary>
@@ -44,6 +42,7 @@ namespace teen_patti.common.Models.Engine
             this._players = builder.Players.ToList();
             this._transitionMove = builder.TransitionMove ?? MoveFactory.GetNullMove(this);
             this._currentPlayer = builder.CurrentPlayer;
+            this._id = Guid.NewGuid();
         }
 
         public Player GetNextPlayer() =>

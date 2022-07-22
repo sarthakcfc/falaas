@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\teen-patti.common\teen-patti.common.csproj" />
+    <ProjectReference Include="..\teen-patti.service\teen-patti.service.csproj" />
   </ItemGroup>
 
 </Project>
