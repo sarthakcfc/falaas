@@ -60,31 +60,17 @@ namespace teen_patti.data.postgres.Migrations
                         .IsRequired()
                         .HasColumnType("jsonb");
 
-                    b.Property<Guid?>("TransitionMoveId")
-                        .HasColumnType("uuid");
+                    b.Property<string>("TransitionMove")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("jsonb")
+                        .HasDefaultValue("{\"Id\":\"00000000-0000-0000-0000-000000000000\",\"MoveType\":null}");
 
                     b.HasKey("Id");
 
                     b.HasIndex("GameId");
 
-                    b.HasIndex("TransitionMoveId");
-
                     b.ToTable("GameStates", "TeenPatti");
-                });
-
-            modelBuilder.Entity("teen_patti.common.Models.Persistence.Move", b =>
-                {
-                    b.Property<Guid?>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("MoveType")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Move", "TeenPatti");
                 });
 
             modelBuilder.Entity("teen_patti.common.Models.Persistence.Transaction", b =>
@@ -138,14 +124,14 @@ namespace teen_patti.data.postgres.Migrations
                         new
                         {
                             Id = new Guid("ed3dd362-f975-40e9-a045-d0b9714b9b64"),
-                            CreateDateUTC = new DateTime(2022, 7, 22, 23, 11, 27, 619, DateTimeKind.Utc).AddTicks(8708),
+                            CreateDateUTC = new DateTime(2022, 7, 23, 1, 32, 46, 429, DateTimeKind.Utc).AddTicks(7313),
                             CurrencyAmount = 1200L,
                             UserName = "aayush.pokharel"
                         },
                         new
                         {
                             Id = new Guid("a27bb201-7559-41a2-99fb-02b79346e4ca"),
-                            CreateDateUTC = new DateTime(2022, 7, 22, 23, 11, 27, 619, DateTimeKind.Utc).AddTicks(8712),
+                            CreateDateUTC = new DateTime(2022, 7, 23, 1, 32, 46, 429, DateTimeKind.Utc).AddTicks(7316),
                             CurrencyAmount = 1200L,
                             UserName = "sarthak.khatiwada"
                         });
@@ -158,12 +144,6 @@ namespace teen_patti.data.postgres.Migrations
                         .HasForeignKey("GameId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("teen_patti.common.Models.Persistence.Move", "TransitionMove")
-                        .WithMany()
-                        .HasForeignKey("TransitionMoveId");
-
-                    b.Navigation("TransitionMove");
                 });
 
             modelBuilder.Entity("teen_patti.common.Models.Persistence.Game", b =>

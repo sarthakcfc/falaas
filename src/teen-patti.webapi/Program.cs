@@ -47,16 +47,26 @@ var scopeRequiredByApi = app.Configuration["AzureAd:Scopes"];
 #region teen-patti
 app.MapPost("teenpatti/intialize/{playerId}", 
     async ([FromQuery]Guid playerId, [FromBody]ICollection<teen_patti.common.Models.ViewModel.CardView> deck, IGameService service) => 
-        await service.InitializeGame(deck, playerId)
-).WithName("Initialize")
-.WithTags("TeenPatti");
+        await service.InitializeGame(deck, playerId))
+    .WithName("Initialize")
+    .WithTags("TeenPatti");
 
-app.MapPost("teenpatti/player/add/{gameId}", 
+app.MapPost("teenpatti/{gameId}/player/add", 
     async ([FromQuery] Guid gameId, [FromQuery] Guid playerId, IGameService service) => 
-        await service.AddPlayer(gameId, playerId)
-).WithName("AddPlayer")
-.WithTags("TeenPatti");
+        await service.AddPlayer(gameId, playerId))
+    .WithName("AddPlayer")
+    .WithTags("TeenPatti");
 
+app.MapGet("teenpatti/{gameId}/deal", 
+    async ([FromQuery] Guid gameId, IGameService service) => 
+        await service.Deal(gameId, 3))
+    .WithName("Deal")
+    .WithTags("TeenPatti");
+app.MapGet("teenpatti/{gameId}/player/{playerId}/hand",
+    async ([FromQuery] Guid gameId, [FromQuery] Guid playerId, IGameService service) =>
+        await service.GetHand(gameId, playerId))
+    .WithName("GetHand")
+    .WithTags("TeenPatti");
 //.RequireAuthorization();
 
 //app.MapPost("teenpatti/deal", (Guid gameStateId) =>

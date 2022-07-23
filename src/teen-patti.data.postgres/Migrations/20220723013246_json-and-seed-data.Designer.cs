@@ -12,8 +12,8 @@ using teen_patti.data.postgres;
 namespace teen_patti.data.postgres.Migrations
 {
     [DbContext(typeof(TeenPattiDbContext))]
-    [Migration("20220722193253_Nullable-Move")]
-    partial class NullableMove
+    [Migration("20220723013246_json-and-seed-data")]
+    partial class jsonandseeddata
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -58,72 +58,21 @@ namespace teen_patti.data.postgres.Migrations
                     b.Property<Guid>("GameId")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Hands")
+                    b.Property<string>("Players")
                         .IsRequired()
                         .HasColumnType("jsonb");
 
-                    b.Property<Guid?>("TransitionMoveId")
-                        .HasColumnType("uuid");
+                    b.Property<string>("TransitionMove")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("jsonb")
+                        .HasDefaultValue("{\"Id\":\"00000000-0000-0000-0000-000000000000\",\"MoveType\":null}");
 
                     b.HasKey("Id");
 
                     b.HasIndex("GameId");
 
-                    b.HasIndex("TransitionMoveId");
-
                     b.ToTable("GameStates", "TeenPatti");
-                });
-
-            modelBuilder.Entity("teen_patti.common.Models.Persistence.Move", b =>
-                {
-                    b.Property<Guid?>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("MoveType")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Move", "TeenPatti");
-                });
-
-            modelBuilder.Entity("teen_patti.common.Models.Persistence.Player", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreateDateUTC")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<long>("CurrencyAmount")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Players", "TeenPatti");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("ed3dd362-f975-40e9-a045-d0b9714b9b64"),
-                            CreateDateUTC = new DateTime(2022, 7, 22, 19, 32, 53, 379, DateTimeKind.Utc).AddTicks(140),
-                            CurrencyAmount = 1200L,
-                            UserName = "aayush.pokharel"
-                        },
-                        new
-                        {
-                            Id = new Guid("a27bb201-7559-41a2-99fb-02b79346e4ca"),
-                            CreateDateUTC = new DateTime(2022, 7, 22, 19, 32, 53, 379, DateTimeKind.Utc).AddTicks(144),
-                            CurrencyAmount = 1200L,
-                            UserName = "sarthak.khatiwada"
-                        });
                 });
 
             modelBuilder.Entity("teen_patti.common.Models.Persistence.Transaction", b =>
@@ -153,6 +102,43 @@ namespace teen_patti.data.postgres.Migrations
                     b.ToTable("Transactions", "TeenPatti");
                 });
 
+            modelBuilder.Entity("teen_patti.common.Models.Persistence.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreateDateUTC")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long>("CurrencyAmount")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users", "TeenPatti");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("ed3dd362-f975-40e9-a045-d0b9714b9b64"),
+                            CreateDateUTC = new DateTime(2022, 7, 23, 1, 32, 46, 429, DateTimeKind.Utc).AddTicks(7313),
+                            CurrencyAmount = 1200L,
+                            UserName = "aayush.pokharel"
+                        },
+                        new
+                        {
+                            Id = new Guid("a27bb201-7559-41a2-99fb-02b79346e4ca"),
+                            CreateDateUTC = new DateTime(2022, 7, 23, 1, 32, 46, 429, DateTimeKind.Utc).AddTicks(7316),
+                            CurrencyAmount = 1200L,
+                            UserName = "sarthak.khatiwada"
+                        });
+                });
+
             modelBuilder.Entity("teen_patti.common.Models.Persistence.GameState", b =>
                 {
                     b.HasOne("teen_patti.common.Models.Persistence.Game", null)
@@ -160,12 +146,6 @@ namespace teen_patti.data.postgres.Migrations
                         .HasForeignKey("GameId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("teen_patti.common.Models.Persistence.Move", "TransitionMove")
-                        .WithMany()
-                        .HasForeignKey("TransitionMoveId");
-
-                    b.Navigation("TransitionMove");
                 });
 
             modelBuilder.Entity("teen_patti.common.Models.Persistence.Game", b =>

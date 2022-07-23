@@ -19,8 +19,8 @@ namespace teen_patti.common.Models.Engine
 
             if (hand.Count > 3)
                 throw new ArgumentException($"Hand cannot be greater than three cards. Hand passed in contianed {hand.Count} cards.");
-
-            hand.CopyTo(_hand.ToArray(), 0);
+            
+            _hand = hand.ToList();
         }
         public Player(Persistence.User persistence, int ordinal)
         {

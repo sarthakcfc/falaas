@@ -13,14 +13,24 @@ namespace teen_patti.common.Models.Persistence
         public Guid CurrentPlayerId { get; set; }
         public List<Player> Players { get; set; }
         public List<Card> Deck { get; set; }
-        public Move? TransitionMove { get; set; }
+        public Move TransitionMove { get; set; }
         public DateTime CreatedDateUTC { get; set; }
+        public GameState()
+        {
+            Players = new List<Player>();
+            Deck = new List<Card>();
+            TransitionMove = new Move();
+        }
     }
     public class Player
     {
         public Guid Id { get; set; }
         public int Ordinal { get; set; }
         public List<Card> Hand { get; set; }
+        public Player()
+        {
+            Hand = new List<Card>();
+        }
     }
 
     public class Card
@@ -40,9 +50,10 @@ namespace teen_patti.common.Models.Persistence
             Players = state.Players.Select(x => new Player()
             {
                 Id = x.Id,
-                Hand = x.Hand.Select(x => x.MapToPersistence()).ToList()
+                Hand = x.Hand.Select(x => x.MapToPersistence()).ToList(),
+                Ordinal = x.Ordinal
             }).ToList(),
-            TransitionMove = state.TransitionMove?.MapToPersistence() ?? null,
+            TransitionMove = (state.TransitionMove ?? new Engine.NullMove(state)).MapToPersistence(),
             CreatedDateUTC = DateTime.UtcNow
         };
 
@@ -53,7 +64,13 @@ namespace teen_patti.common.Models.Persistence
             IsVisible = card.IsVisible,
         };
         public static Engine.Card MapToCard(this Card card) => new Engine.Card(card);
-
+        public static ViewModel.CardView MapToView(this Card card) => new ViewModel.CardView()
+        {
+            Rank = card.Rank,
+            Suit = card.Suit,
+            IsVisible = card.IsVisible
+        };
         public static Engine.Player MapToPlayer(this Player player) => new Engine.Player(player);
+        
     }
 }

@@ -26,7 +26,7 @@ namespace teen_patti.data.postgres
         /// TODO Use app settings for this
         /// </summary>
         /// <param name="builder"></param>
-        protected override void OnConfiguring(DbContextOptionsBuilder builder) => builder.UseNpgsql("Server=localhost;Port=5432;UserId=postgres;Password=123prasad//;Pooling=false;Database=GamblingDB");
+        protected override void OnConfiguring(DbContextOptionsBuilder builder) => builder.UseNpgsql("Server=localhost;Port=5432;UserId=postgres;Password=123prasad//;Pooling=false;Database=GamblingDB;IncludeErrorDetail=true;");
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -50,6 +50,9 @@ namespace teen_patti.data.postgres
                 .Property(x => x.Deck).HasJsonConversion();
             builder.Entity<common.Models.Persistence.GameState>()
                 .Property(x => x.Players).HasJsonConversion();
+            builder.Entity<common.Models.Persistence.GameState>()
+                .Property(x => x.TransitionMove).HasJsonConversion()
+                .HasDefaultValue(new common.Models.Persistence.Move());
 
             //Seed player Data. TODO Remove this in the future once we have real players
             builder.Entity<common.Models.Persistence.User>().HasData(new common.Models.Persistence.User()
