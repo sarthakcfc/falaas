@@ -6,6 +6,7 @@ using Microsoft.Identity.Web.Resource;
 using teen_patti.service;
 using teen_patti.service.Interefaces;
 
+#region app-setup
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -41,12 +42,21 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 var scopeRequiredByApi = app.Configuration["AzureAd:Scopes"];
+#endregion
 
 #region teen-patti
-app.MapPost("teenpatti/intiialize", 
-    ([FromBody]ICollection<teen_patti.common.Models.ViewModel.CardView> deck, IGameService service) => service.InitializeGame(deck, Guid.NewGuid())
+app.MapPost("teenpatti/intialize/{playerId}", 
+    async ([FromQuery]Guid playerId, [FromBody]ICollection<teen_patti.common.Models.ViewModel.CardView> deck, IGameService service) => 
+        await service.InitializeGame(deck, playerId)
 ).WithName("Initialize")
 .WithTags("TeenPatti");
+
+app.MapPost("teenpatti/player/add/{gameId}", 
+    async ([FromQuery] Guid gameId, [FromQuery] Guid playerId, IGameService service) => 
+        await service.AddPlayer(gameId, playerId)
+).WithName("AddPlayer")
+.WithTags("TeenPatti");
+
 //.RequireAuthorization();
 
 //app.MapPost("teenpatti/deal", (Guid gameStateId) =>
@@ -66,12 +76,15 @@ app.MapPost("teenpatti/intiialize",
 
 #region deck
 
-app.MapGet("deck/create", ([FromQuery] int count) =>
-{
-    return teen_patti.common.Models.Engine.Card.CreateDeck(count);
-})
+app.MapGet("deck/create", ([FromQuery] int count) => teen_patti.common.Models.Engine.Card.CreateDeck(count))
 .WithName("DeckCreate")
 .WithTags("Deck");
+#endregion
+
+#region user
+
+app.MapGet("users", async (IPlayerService service) => await service.GetPlayers()).WithName("GetPlayers").WithTags("user");
+
 #endregion
 
 app.Run();

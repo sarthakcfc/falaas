@@ -17,7 +17,7 @@ namespace teen_patti.common.Models.Engine
         private readonly IReadOnlyCollection<Card> _deck;
         private readonly IReadOnlyCollection<Player> _players;
         private readonly Player _currentPlayer;
-        private readonly Move? _transitionMove;
+        private readonly Move _transitionMove;
         private readonly long _potAmount;
         private readonly Guid _id;
 

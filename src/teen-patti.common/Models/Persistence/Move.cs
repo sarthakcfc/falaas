@@ -8,7 +8,7 @@ namespace teen_patti.common.Models.Persistence
 {
     public class Move
     {
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
         public string MoveType { get; set; }
     }
     public static class MoveExtensions

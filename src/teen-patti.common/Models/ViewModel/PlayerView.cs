@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using teen_patti.common.Models.Engine;
 
 namespace teen_patti.common.Models.ViewModel
 {
@@ -21,10 +20,16 @@ namespace teen_patti.common.Models.ViewModel
             Id = player.Id;
             Hand = player.Hand.Select(x => x.MapToView()).ToList();
         }
+        public PlayerView(Persistence.User player)
+        {
+            Id = player.Id;
+            Hand = new List<CardView>();
+        }
 
     }
     public static class PlayerViewExtensions
     {
-        public static PlayerView MapToView(this Player player) => new PlayerView(player);
+        public static PlayerView MapToView(this Engine.Player player) => new PlayerView(player);
+        public static PlayerView MapToView(this Persistence.User player) => new PlayerView(player);
     }
 }

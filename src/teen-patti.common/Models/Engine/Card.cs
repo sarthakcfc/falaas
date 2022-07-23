@@ -24,6 +24,13 @@ namespace teen_patti.common.Models.Engine
             _suit = cardSuit;
             _isVisible = false;
         }
+        public Card(Persistence.Card persistence)
+        {
+            _rank = persistence.Rank;
+            _suit = persistence.Suit;
+            _isVisible = persistence.IsVisible;
+        }
+            
         public Card(CardView view)
         {
             _rank = view.Rank;
@@ -42,5 +49,23 @@ namespace teen_patti.common.Models.Engine
         }
 
         public override string ToString() => IsVisible ? _rank.ToFriendlyString() + " " + Suit.ToFriendlyString() : "*";
+    }
+
+    public static class CardExtensions
+    {
+        private static Random rng = new Random();
+        public static ICollection<T> Shuffle<T>(this IList<T> list)
+        {
+            int n = list.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = rng.Next(n + 1);
+                T value = list[k];
+                list[k] = list[n];
+                list[n] = value;
+            }
+            return list;
+        }
     }
 }

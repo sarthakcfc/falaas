@@ -10,14 +10,13 @@ namespace teen_patti.common.Models.Engine
 {
     public abstract class Move
     {
-        protected readonly Guid _id;
+        protected Guid? _id;
         protected readonly GameState _state;
 
         public GameState State { get => _state; }
-        public Guid Id { get => _id; }
+        public Guid? Id { get => _id; }
         public Move(GameState state) 
         {
-            _id = Guid.NewGuid();
             _state = state;
         }
 
@@ -60,18 +59,21 @@ namespace teen_patti.common.Models.Engine
     {
         public BlindBet(GameState state) : base(state)
         {
+            _id = Guid.NewGuid();
         }
     }
     public sealed class SeenBet : Move
     {
         public SeenBet(GameState state) : base(state)
         {
+            _id = Guid.NewGuid();
         }
     }
     public sealed class SeeCards : Move
     {
         public SeeCards(GameState state) : base(state)
         {
+            _id = Guid.NewGuid();
         }
         public override GameState Execute()
         {
@@ -104,6 +106,7 @@ namespace teen_patti.common.Models.Engine
     {
         public NullMove(GameState state) : base(state)
         {
+            _id = null;
         }
         public override GameState Execute()
         {

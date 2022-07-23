@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace teen_patti.common.Models.Persistence
 {
-    public class Player
+    public class User
     {
         public Guid Id { get; set; }
         public string UserName { get; set; }
         public long CurrencyAmount { get; set; }
         public DateTime CreateDateUTC { get; set; }
     }
-    public static class PlayerExtensions
+    public static class UserExtensions
     {
-        public static Engine.Player MapToPlayer(this Player persistence, int ordinal) => new Engine.Player(persistence, ordinal);
+        public static Engine.Player MapToPlayer(this User persistence, int ordinal) => new Engine.Player(persistence, ordinal);
 
     }
 }
