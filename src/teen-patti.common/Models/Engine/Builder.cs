@@ -14,11 +14,13 @@ namespace teen_patti.common.Models.Engine
         private ICollection<Player> _players;
         private Move _transitionMove;
         private Player _currentPlayer;
+        private Guid _gameId;
 
         public ICollection<Card> Deck { get => _deck; }
         public ICollection<Player> Players { get => _players; }
         public Move TransitionMove { get => _transitionMove; }
         public Player CurrentPlayer { get => _currentPlayer; }
+        public Guid GameId { get => _gameId; }
         public Builder()
         {
             _deck = new List<Card>();
@@ -54,14 +56,20 @@ namespace teen_patti.common.Models.Engine
             _transitionMove = move;
             return this;
         }
+        public Builder SetGame(Guid gameId)
+        {
+            _gameId = gameId;
+            return this;
+        }
 
         public Builder MapFromPersistedState(Persistence.GameState state)
         {
-            var currentPlayer = state.Players.FirstOrDefault(x => x.Id == state.CurrentPlayerId)?.MapToPlayer() ??
+            var currentPlayer = state.Players.FirstOrDefault(x => x.Id == state.CurrentPlayer.Id)?.MapToPlayer() ??
                 throw new Exception("Current Player in state not found.");
             
             this.AssignDeck(state.Deck.Select(x => x.MapToCard()).ToList())
                 .SetPlayers(state.Players.Select(x => x.MapToPlayer()).ToList())
+                .SetGame(state.GameId)
                 .SetCurrentPlayer(currentPlayer);
             
             return this;

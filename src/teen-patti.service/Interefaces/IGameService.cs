@@ -8,9 +8,11 @@ namespace teen_patti.service.Interefaces
 {
     public interface IGameService
     {
-        Task<Guid> InitializeGame(ICollection<common.Models.ViewModel.CardView> deck, Guid playerId);
-        Task<Guid> AddPlayer(Guid gameId, Guid playerId);
-        Task<Guid> Deal(Guid gameId, int handSize);
-        Task<ICollection<common.Models.ViewModel.CardView>> GetHand(Guid gameId, Guid playerId);
+        Task<common.Models.ViewModel.GameStateView> InitializeGame(ICollection<common.Models.ViewModel.CardView> deck, Guid playerId);
+        Task<common.Models.ViewModel.GameStateView> AddPlayer(Guid gameId, Guid playerId);
+        Task<common.Models.ViewModel.GameStateView> Deal(Guid gameId, int handSize);
+        Task<common.Models.ViewModel.GameStateView> GetState(Guid gameId, Guid playerId);
+        Task<common.Models.ViewModel.GameStateView> SeeHand(Guid gameId, Guid playerId);
+        Task<common.Models.ViewModel.GameStateView> Bet(Guid gameId, Guid playerId);
     }
 }

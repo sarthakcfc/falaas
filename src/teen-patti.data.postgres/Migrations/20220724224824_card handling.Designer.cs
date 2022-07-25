@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using teen_patti.data.postgres;
@@ -11,9 +12,10 @@ using teen_patti.data.postgres;
 namespace teen_patti.data.postgres.Migrations
 {
     [DbContext(typeof(TeenPattiDbContext))]
-    partial class TeenPattiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220724224824_card handling")]
+    partial class cardhandling
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -106,10 +108,6 @@ namespace teen_patti.data.postgres.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<int>("Ordinal")
                         .HasColumnType("integer");
 
@@ -169,14 +167,14 @@ namespace teen_patti.data.postgres.Migrations
                         new
                         {
                             Id = new Guid("ed3dd362-f975-40e9-a045-d0b9714b9b64"),
-                            CreateDateUTC = new DateTime(2022, 7, 25, 0, 13, 28, 682, DateTimeKind.Utc).AddTicks(4738),
+                            CreateDateUTC = new DateTime(2022, 7, 24, 22, 48, 23, 931, DateTimeKind.Utc).AddTicks(3766),
                             CurrencyAmount = 1200L,
                             UserName = "aayush.pokharel"
                         },
                         new
                         {
                             Id = new Guid("a27bb201-7559-41a2-99fb-02b79346e4ca"),
-                            CreateDateUTC = new DateTime(2022, 7, 25, 0, 13, 28, 682, DateTimeKind.Utc).AddTicks(4740),
+                            CreateDateUTC = new DateTime(2022, 7, 24, 22, 48, 23, 931, DateTimeKind.Utc).AddTicks(3768),
                             CurrencyAmount = 1200L,
                             UserName = "sarthak.khatiwada"
                         });

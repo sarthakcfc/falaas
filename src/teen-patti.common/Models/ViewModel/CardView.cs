@@ -9,18 +9,16 @@ namespace teen_patti.common.Models.ViewModel
 {
     public class CardView
     {
-        public CardRank Rank { get; set; }
-        public CardSuit Suit { get; set; }
-        public bool IsVisible { get; set; }
+        public string Rank { get; set; }
+        public string Suit { get; set; }
     }
     public static class CardViewExtensions
     {
         public static CardView MapToView(this Card card) => new CardView()
         {
-            Rank = card.Rank,
-            Suit = card.Suit,
-            IsVisible = card.IsVisible,
+            Rank = card.Rank.ToString(),
+            Suit = card.Suit.ToString(),
         };
-        public static Card MapToCart(this CardView view) => new Card(view);
+        public static Card MapToCard(this CardView view) => new Card(view);
     }
 }

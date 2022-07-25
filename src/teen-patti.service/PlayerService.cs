@@ -19,6 +19,6 @@ namespace teen_patti.service
         /// TODO add filters to this later
         /// </summary>
         /// <returns></returns>
-        public async Task<ICollection<PlayerView>> GetPlayers() => await _dbContext.Users.Select(x => x.MapToView()).ToListAsync(); 
+        public async Task<ICollection<PlayerView>> GetPlayers() => await _dbContext.Users.Select(x => x.MapToPlayerView()).ToListAsync(); 
     }
 }

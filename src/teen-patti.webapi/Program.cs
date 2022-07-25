@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.Resource;
+using teen_patti.common.Models.ViewModel;
 using teen_patti.service;
 using teen_patti.service.Interefaces;
-
 #region app-setup
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +21,7 @@ builder.Services.AddDbContext<teen_patti.data.postgres.TeenPattiDbContext>();
 builder.Services.AddScoped<IGameService, GameService>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddScoped<IPlayerService, PlayerService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 // Add Swagger
 builder.Services.AddEndpointsApiExplorer();
@@ -62,38 +63,36 @@ app.MapGet("teenpatti/{gameId}/deal",
         await service.Deal(gameId, 3))
     .WithName("Deal")
     .WithTags("TeenPatti");
-app.MapGet("teenpatti/{gameId}/player/{playerId}/hand",
+
+app.MapGet("teenpatti/{gameId}/player/{playerId}/state",
     async ([FromQuery] Guid gameId, [FromQuery] Guid playerId, IGameService service) =>
-        await service.GetHand(gameId, playerId))
+        await service.GetState(gameId, playerId))
     .WithName("GetHand")
     .WithTags("TeenPatti");
-//.RequireAuthorization();
 
-//app.MapPost("teenpatti/deal", (Guid gameStateId) =>
-//{
-//    var state = new GameState(view);
-//    for (int i = 0; i < 6; i++)
-//    {
-//        var move = MoveFactory.CreateMove(state);
-//        state = move.Execute();
-//    }
-//    var returnVal =  state.MapToView();
-//    return returnVal;
-//})
-//.WithName("Deal")
-//.WithTags("TeenPatti");
+app.MapGet("teenpatti/{gameId}/player/{playerId}/hand/see",
+    async ([FromQuery] Guid gameId, [FromQuery] Guid playerId, IGameService service) =>
+        await service.SeeHand(gameId, playerId))
+    .WithName("SeeHand")
+    .WithTags("TeenPatti");
+
+app.MapPost("teenpatti/{gameId}/player/{playerId}/bet",
+    async ([FromQuery] Guid gameId, [FromQuery] Guid playerId, IGameService service) =>
+        await service.Bet(gameId, playerId))
+    .WithName("SeenBet")
+    .WithTags("TeenPatti");
 #endregion
 
 #region deck
 
-app.MapGet("deck/create", ([FromQuery] int count) => teen_patti.common.Models.Engine.Card.CreateDeck(count))
+app.MapGet("deck/create", ([FromQuery] int count) => teen_patti.common.Models.Engine.Card.CreateDeck(count).Select(x => x.MapToView()))
 .WithName("DeckCreate")
 .WithTags("Deck");
 #endregion
 
 #region user
 
-app.MapGet("users", async (IPlayerService service) => await service.GetPlayers()).WithName("GetPlayers").WithTags("user");
+app.MapGet("users", async (IUserService service) => await service.GetUsers()).WithName("GetPlayers").WithTags("user");
 
 #endregion
 

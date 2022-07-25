@@ -117,16 +117,15 @@ namespace teen_patti.common.Models.Engine
             return new NullMove(state);
         }
 
-        public static Move CreateMove(GameState state, string input = "")
+        public static Move CreateMove(GameState state, string moveType)
         {
             //Validate that Every player has 3 cards per hand else keep dealing
-            if(String.IsNullOrEmpty(input))
+            if(String.IsNullOrEmpty(moveType))
                 return new Deal(state);
 
-            switch (input)
+            switch (moveType)
             {
-                case "S":
-                case "s":
+                case nameof(SeeCards):
                     return new SeeCards(state);
                 default:
                     throw new ArgumentException("Invalid Input");
