@@ -9,6 +9,5 @@ namespace teen_patti.service.Interefaces
 {
     public interface IPlayerService
     {
-        Task<ICollection<PlayerView>> GetPlayers();
     }
 }

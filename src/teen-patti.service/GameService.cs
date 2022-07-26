@@ -22,9 +22,9 @@ namespace teen_patti.service
             var game = await _dbContext.Games.Include(x => x.States).FirstOrDefaultAsync(x => x.Id == gameId);
             if (game == null)
                 throw new ArgumentException("Game does not exist!");
-            var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == playerId);
-            if (user == null)
-                throw new ArgumentException("Player does not exit!");
+            var requestedPlayer = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == playerId);
+            if (requestedPlayer == null)
+                throw new ArgumentException("User does not exit!");
 
             //get latest game state
             var state = game.States.OrderByDescending(x => x.CreatedDateUTC).FirstOrDefault();
@@ -34,14 +34,16 @@ namespace teen_patti.service
             var currentPlayer = state.Players.FirstOrDefault(x => x.Id == state.CurrentPlayer.Id)?.MapToPlayer() ??
                 throw new Exception("Current Player in state not found.");
 
+            var ordinal = currentPlayer.Ordinal + 1;
             var gameState = new Builder()
                 .MapFromPersistedState(state)
-                .AddPlayer(user.MapToPlayer(currentPlayer.Ordinal + 1))
+                .AddPlayer(requestedPlayer.MapToPlayer(ordinal))
                 .Build();
             await _dbContext.GameStates.AddAsync(gameState.MapToPersistence(game));
             await _dbContext.SaveChangesAsync();
 
-            return gameState.MapToPlayerView();
+            return gameState.MapToPlayerView(gameState.Players?.FirstOrDefault(x => x.Ordinal == ordinal)?.MapToView() ?? throw new Exception("Something went horribly wrong!"));
+
         }
 
         public Task<common.Models.ViewModel.GameStateView> Bet(Guid gameId, Guid playerId)
@@ -60,16 +62,16 @@ namespace teen_patti.service
             if (state == null)
                 throw new Exception($"Could not find states for game: {game.Id}");
 
-            var intiialState = new Builder()
+            var initialState = new Builder()
                 .MapFromPersistedState(state)
                 .Build();
 
             var saveStates = new List<common.Models.Persistence.GameState>();
 
-            var move = new Deal(intiialState);
+            var move = new Deal(initialState);
             for(int i = 0; i < handSize; i++)
             {
-                foreach (var player in intiialState.Players)
+                foreach (var player in initialState.Players)
                 {
                     var dealState = move.Execute();
                     saveStates.Add(dealState.MapToPersistence(game));
@@ -80,7 +82,7 @@ namespace teen_patti.service
             await _dbContext.GameStates.AddRangeAsync(saveStates);
             await _dbContext.SaveChangesAsync();
 
-            return saveStates.OrderByDescending(x => x.CreatedDateUTC).FirstOrDefault()?.MapToPlayerView() ?? new GameStateView();
+            return saveStates.OrderByDescending(x => x.CreatedDateUTC).FirstOrDefault()?.MapToPlayerView(new PlayerView()) ?? new GameStateView();
         }
 
         public async Task<common.Models.ViewModel.GameStateView> GetState(Guid gameId, Guid playerId)
@@ -98,7 +100,7 @@ namespace teen_patti.service
             if(player == null)
                 throw new ArgumentException("Player does not exist in the game!");
 
-            return state.MapToPlayerView();
+            return state.MapToPlayerView(player.MapToView());
         }
 
         public async Task<common.Models.ViewModel.GameStateView> InitializeGame(ICollection<CardView> deck, Guid playerId)
@@ -126,7 +128,7 @@ namespace teen_patti.service
             await _dbContext.Games.AddAsync(game);
             await _dbContext.GameStates.AddAsync(persitenceState);
             await _dbContext.SaveChangesAsync();
-            return persitenceState.MapToPlayerView();
+            return persitenceState.MapToPlayerView(gameState.CurrentPlayer.MapToView());
         }
 
         public async Task<GameStateView> SeeHand(Guid gameId, Guid playerId)
@@ -140,6 +142,9 @@ namespace teen_patti.service
             if (persistedState == null)
                 throw new Exception($"Could not find states for game: {game.Id}");
 
+            if (persistedState.CurrentPlayer.Id != playerId)
+                throw new ArgumentException($"Player cannot make move: {nameof(SeeCards)}. Reason: Another player's turn!");
+
             var player = persistedState.Players.FirstOrDefault(x => x.Id == playerId);
             if (player == null)
                 throw new ArgumentException("Player does not exist in the game!");
@@ -149,15 +154,13 @@ namespace teen_patti.service
             var state = builder.Build();
 
             var move = MoveFactory.CreateMove(state, nameof(SeeCards));
-
             state = move.Execute();
 
             var saveState = state.MapToPersistence(game);
-            
             await _dbContext.GameStates.AddAsync(saveState);
             await _dbContext.SaveChangesAsync();
 
-            return saveState.MapToPlayerView();
+            return saveState.MapToPlayerView(saveState.Players.FirstOrDefault(x => x.Id == player.Id)?.MapToView() ?? throw new Exception("Something went horribly wrong!"));
         }
     }
 

@@ -14,9 +14,10 @@ namespace teen_patti.common.Models.Engine
         public Guid Id { get => _id; }
         public int Ordinal { get => _ordinal; }
         public string Name { get => _name; }
-        public Player(Guid playerId, ICollection<Card> hand, int ordinal)
+        public Player(Guid playerId, string name, ICollection<Card> hand, int ordinal)
         {
             _id = playerId;
+            _name = name;
             _ordinal = ordinal;
 
             if (hand.Count > 3)

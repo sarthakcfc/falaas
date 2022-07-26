@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using teen_patti.data.postgres;
@@ -11,9 +12,10 @@ using teen_patti.data.postgres;
 namespace teen_patti.data.postgres.Migrations
 {
     [DbContext(typeof(TeenPattiDbContext))]
-    partial class TeenPattiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220725013341_currentPlayer")]
+    partial class currentPlayer
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

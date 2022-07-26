@@ -51,6 +51,9 @@ namespace teen_patti.data.postgres
             builder.Entity<common.Models.Persistence.GameState>()
                 .Property(x => x.Players).HasJsonConversion();
             builder.Entity<common.Models.Persistence.GameState>()
+                .Property(x => x.CurrentPlayer).HasJsonConversion()
+                .HasDefaultValue(new common.Models.Persistence.Player());
+            builder.Entity<common.Models.Persistence.GameState>()
                 .Property(x => x.TransitionMove).HasJsonConversion()
                 .HasDefaultValue(new common.Models.Persistence.Move());
 

@@ -51,8 +51,6 @@ namespace teen_patti.common.Models.Engine
 
             return cards;
         }
-
-        public override string ToString() => IsVisible ? _rank.ToFriendlyString() + " " + Suit.ToFriendlyString() : "*";
     }
 
     public static class CardExtensions

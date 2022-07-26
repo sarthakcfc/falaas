@@ -44,7 +44,7 @@ namespace teen_patti.common.Models.Engine
             
             var hand = currentPlayer.Hand;
             hand.Add(deck.Pop());
-            var newPlayer = new Player(currentPlayer.Id, hand, currentPlayer.Ordinal);
+            var newPlayer = new Player(currentPlayer.Id, currentPlayer.Name, hand, currentPlayer.Ordinal);
             
             players[newPlayer.Ordinal - 1] = newPlayer;
 
@@ -86,7 +86,7 @@ namespace teen_patti.common.Models.Engine
             foreach (var card in hand)
                 card.IsVisible = true;
 
-            var newPlayer = new Player(currentPlayer.Id, hand, currentPlayer.Ordinal);
+            var newPlayer = new Player(currentPlayer.Id, currentPlayer.Name, hand, currentPlayer.Ordinal);
 
             players[newPlayer.Ordinal - 1] = newPlayer;
 

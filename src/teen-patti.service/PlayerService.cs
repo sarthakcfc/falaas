@@ -15,10 +15,5 @@ namespace teen_patti.service
         private readonly TeenPattiDbContext _dbContext;
         public PlayerService(TeenPattiDbContext dbContext) => _dbContext = dbContext;
 
-        /// <summary>
-        /// TODO add filters to this later
-        /// </summary>
-        /// <returns></returns>
-        public async Task<ICollection<PlayerView>> GetPlayers() => await _dbContext.Users.Select(x => x.MapToPlayerView()).ToListAsync(); 
     }
 }

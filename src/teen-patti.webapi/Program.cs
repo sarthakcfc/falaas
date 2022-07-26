@@ -85,7 +85,7 @@ app.MapPost("teenpatti/{gameId}/player/{playerId}/bet",
 
 #region deck
 
-app.MapGet("deck/create", ([FromQuery] int count) => teen_patti.common.Models.Engine.Card.CreateDeck(count).Select(x => x.MapToView()))
+app.MapGet("deck/create", ([FromQuery] int count) => teen_patti.common.Models.Engine.Card.CreateDeck(count).Select(x => x.MapToSeenView()))
 .WithName("DeckCreate")
 .WithTags("Deck");
 #endregion
