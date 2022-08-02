@@ -4,11 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using teen_patti.common.Models.ViewModel;
 
-namespace teen_patti.common
+namespace teen_patti.common.Models.Engine
 {
     public class Card
     {
+        private readonly Guid _id;
         private readonly CardRank _rank;
         private readonly CardSuit _suit;
         private bool _isVisible;
@@ -16,33 +18,41 @@ namespace teen_patti.common
         public CardRank Rank { get => _rank; }
         public CardSuit Suit { get => _suit; }
         public bool IsVisible { get => _isVisible; set => _isVisible = value; }
-
+        public Guid Id { get => _id; }
         public Card(CardRank cardRank, CardSuit cardSuit)
         {
+            _id = Guid.NewGuid();
             _rank = cardRank;
             _suit = cardSuit;
             _isVisible = false;
         }
-
+        public Card(Persistence.Card persistence)
+        {
+            _id = persistence.Id;
+            _rank = persistence.Rank;
+            _suit = persistence.Suit;
+            _isVisible = persistence.IsVisible;
+        }
+            
         public Card(CardView view)
         {
-            _rank = view.Rank;
-            _suit = view.Suit;
-            _isVisible = view.IsVisible;
+            _id = Guid.NewGuid();
+            _rank = (CardRank)Enum.Parse(typeof(CardRank), view.Rank);
+            _suit = (CardSuit)Enum.Parse(typeof(CardSuit), view.Suit);
+            _isVisible = false;
         }
-
-        public static ICollection<Card> NewTeenPattiDeck()
+        public static ICollection<Card> CreateDeck(int numberOfDecks)
         {
             var cards = new List<Card>();
-            foreach (CardRank cardRank in Enum.GetValues(typeof(CardRank)))
-                foreach (CardSuit suit in Enum.GetValues(typeof(CardSuit)))
-                    cards.Add(new Card(cardRank, suit));
+            for(int i = 0; i < numberOfDecks; i++)
+                foreach (CardRank cardRank in Enum.GetValues(typeof(CardRank)))
+                    foreach (CardSuit suit in Enum.GetValues(typeof(CardSuit)))
+                        cards.Add(new Card(cardRank, suit));
 
-            return cards.Shuffle();
+            return cards;
         }
-
-        public override string ToString() => IsVisible ? _rank.ToFriendlyString() + " " + Suit.ToFriendlyString() : "*";
     }
+
     public static class CardExtensions
     {
         private static Random rng = new Random();

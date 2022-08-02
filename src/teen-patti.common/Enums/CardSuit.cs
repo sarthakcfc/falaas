@@ -15,12 +15,12 @@ namespace teen_patti.common
     }
     public static class CardSuitExtensions
     {
-        public static string ToFriendlyString(this CardSuit suit) => suit switch
+        public static string ToFaceDownString(this CardSuit suit) => suit switch
         {
-            CardSuit.Daimond => "♦",
-            CardSuit.Clover => "♣",
-            CardSuit.Heart => "♥",
-            CardSuit.Spade => "♠",
+            CardSuit.Daimond => "*",
+            CardSuit.Clover => "*",
+            CardSuit.Heart => "*",
+            CardSuit.Spade => "*",
             _ => throw new Exception("Invalid Suit")
         };
     }

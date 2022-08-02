@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32421.90
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "teen-patti.console", "teen-patti\teen-patti.console.csproj", "{93379C2B-B1AF-4615-A298-4FA1BC074CD5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "teen-patti.webapi", "teen-patti.webapi\teen-patti.webapi.csproj", "{7AF11022-4A9C-450F-8E71-5A43D5F71237}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "teen-patti.webapi", "teen-patti.webapi\teen-patti.webapi.csproj", "{7AF11022-4A9C-450F-8E71-5A43D5F71237}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "teen-patti.common", "teen-patti.common\teen-patti.common.csproj", "{51A13789-6AE0-4C8E-9065-DA8E84437C8E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "teen-patti.common", "teen-patti.common\teen-patti.common.csproj", "{51A13789-6AE0-4C8E-9065-DA8E84437C8E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "teen-patti.data.postgres", "teen-patti.data.postgres\teen-patti.data.postgres.csproj", "{D30BEBD6-4F58-4708-8276-142EA92AAD7B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "teen-patti.service", "teen-patti.service\teen-patti.service.csproj", "{6EEF4BE9-969B-46C5-BF61-D232F9B4FD45}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,10 +17,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{93379C2B-B1AF-4615-A298-4FA1BC074CD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{93379C2B-B1AF-4615-A298-4FA1BC074CD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{93379C2B-B1AF-4615-A298-4FA1BC074CD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{93379C2B-B1AF-4615-A298-4FA1BC074CD5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7AF11022-4A9C-450F-8E71-5A43D5F71237}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7AF11022-4A9C-450F-8E71-5A43D5F71237}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7AF11022-4A9C-450F-8E71-5A43D5F71237}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -27,6 +25,14 @@ Global
 		{51A13789-6AE0-4C8E-9065-DA8E84437C8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{51A13789-6AE0-4C8E-9065-DA8E84437C8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{51A13789-6AE0-4C8E-9065-DA8E84437C8E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D30BEBD6-4F58-4708-8276-142EA92AAD7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D30BEBD6-4F58-4708-8276-142EA92AAD7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D30BEBD6-4F58-4708-8276-142EA92AAD7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D30BEBD6-4F58-4708-8276-142EA92AAD7B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6EEF4BE9-969B-46C5-BF61-D232F9B4FD45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EEF4BE9-969B-46C5-BF61-D232F9B4FD45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6EEF4BE9-969B-46C5-BF61-D232F9B4FD45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EEF4BE9-969B-46C5-BF61-D232F9B4FD45}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
