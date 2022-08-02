@@ -46,9 +46,36 @@ namespace teen_patti.service
 
         }
 
-        public Task<common.Models.ViewModel.GameStateView> Bet(Guid gameId, Guid playerId)
+        public async Task<common.Models.ViewModel.GameStateView> Bet(Guid gameId, Guid playerId, long betAmount)
         {
-            throw new NotImplementedException();
+            var game = await _dbContext.Games.Include(x => x.States).FirstOrDefaultAsync(x => x.Id == gameId);
+            if (game == null)
+                throw new ArgumentException("Game does not exist!");
+            var requestedPlayer = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == playerId);
+            if (requestedPlayer == null)
+                throw new ArgumentException("User does not exit!");
+
+            //get latest game state
+            var state = game.States.OrderByDescending(x => x.CreatedDateUTC).FirstOrDefault();
+            if (state == null)
+                throw new Exception($"Could not find states for game: {game.Id}");
+
+            var currentPlayer = state.Players.FirstOrDefault(x => x.Id == state.CurrentPlayer.Id)?.MapToPlayer() ??
+                throw new Exception("Current Player in state not found.");
+
+            var initialState = new Builder()
+                .MapFromPersistedState(state)
+                .Build();
+            var move = new Bet(initialState);
+
+            var saveState = move.Execute(betAmount).MapToPersistence(game);
+
+            await _dbContext.GameStates.AddAsync(saveState);
+            await _dbContext.SaveChangesAsync();
+
+            return saveState.MapToPlayerView(
+                state.Players?.FirstOrDefault(x => x.Ordinal == currentPlayer.Ordinal)?.MapToView() ?? throw new Exception("Player in state not found!")
+                );
         }
 
         public async Task<common.Models.ViewModel.GameStateView> Deal(Guid gameId, int handSize)
@@ -153,7 +180,7 @@ namespace teen_patti.service
                 .MapFromPersistedState(persistedState);
             var state = builder.Build();
 
-            var move = MoveFactory.CreateMove(state, nameof(SeeCards));
+            var move = new SeeCards(state);
             state = move.Execute();
 
             var saveState = state.MapToPersistence(game);

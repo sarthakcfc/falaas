@@ -15,12 +15,16 @@ namespace teen_patti.common.Models.Engine
         private Move _transitionMove;
         private Player _currentPlayer;
         private Guid _gameId;
+        private long _potAmount;
+        private long _currentBetAmount;
 
         public ICollection<Card> Deck { get => _deck; }
         public ICollection<Player> Players { get => _players; }
         public Move TransitionMove { get => _transitionMove; }
         public Player CurrentPlayer { get => _currentPlayer; }
         public Guid GameId { get => _gameId; }
+        public long PotAmount { get => _potAmount; }
+        public long CurrentBetAmount { get => _currentBetAmount; }
         public Builder()
         {
             _deck = new List<Card>();
@@ -61,23 +65,35 @@ namespace teen_patti.common.Models.Engine
             _gameId = gameId;
             return this;
         }
-
-        public Builder MapFromPersistedState(Persistence.GameState state)
+        public Builder SetPotAmount(long potAmount)
         {
-            var currentPlayer = state.Players.FirstOrDefault(x => x.Id == state.CurrentPlayer.Id)?.MapToPlayer() ??
-                throw new Exception("Current Player in state not found.");
-            
-            this.AssignDeck(state.Deck.Select(x => x.MapToCard()).ToList())
-                .SetPlayers(state.Players.Select(x => x.MapToPlayer()).ToList())
-                .SetGame(state.GameId)
-                .SetCurrentPlayer(currentPlayer);
-            
+            _potAmount = potAmount;
+            return this;
+        }
+        public Builder SetBetAmount(long betAmount)
+        {
+            _currentBetAmount = betAmount;
             return this;
         }
 
         public GameState Build()
         {
             return new GameState(this);
+        }
+
+        public Builder MapFromPersistedState(Persistence.GameState state)
+        {
+            var currentPlayer = state.Players.FirstOrDefault(x => x.Id == state.CurrentPlayer.Id)?.MapToPlayer() ??
+                throw new Exception("Current Player in state not found.");
+
+            this.AssignDeck(state.Deck.Select(x => x.MapToCard()).ToList())
+                .SetPlayers(state.Players.Select(x => x.MapToPlayer()).ToList())
+                .SetGame(state.GameId)
+                .SetPotAmount(state.PotAmount)
+                .SetBetAmount(state.CurrentBetAmount)
+                .SetCurrentPlayer(currentPlayer);
+
+            return this;
         }
     }
 }

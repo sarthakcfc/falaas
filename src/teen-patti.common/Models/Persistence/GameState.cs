@@ -10,6 +10,8 @@ namespace teen_patti.common.Models.Persistence
     {
         public Guid Id { get; set; }
         public Guid GameId { get; set; }
+        public long CurrentBetAmount { get; set; }
+        public long PotAmount { get; set; }
         public Player CurrentPlayer { get; set; }
         public List<Player> Players { get; set; }
         public List<Card> Deck { get; set; }
@@ -54,6 +56,8 @@ namespace teen_patti.common.Models.Persistence
             GameId = game.Id,
             CurrentPlayer = state.CurrentPlayer.MapToPersistence(),
             Deck = state.Deck.Select(x => x.MapToPersistence()).ToList(),
+            CurrentBetAmount = state.CurrentBetAmount,
+            PotAmount = state.PotAmount,
             Players = state.Players.Select(x => new Player()
             {
                 Id = x.Id,

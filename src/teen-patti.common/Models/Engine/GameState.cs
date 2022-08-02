@@ -19,6 +19,7 @@ namespace teen_patti.common.Models.Engine
         private readonly Player _currentPlayer;
         private readonly Move _transitionMove;
         private readonly long _potAmount;
+        private readonly long _currentBetAmount;
         private readonly Guid _id;
         private readonly Guid _gameId;
 
@@ -30,6 +31,7 @@ namespace teen_patti.common.Models.Engine
         public ICollection<Card> Deck { get => _deck.ToList(); }
         public ICollection<Player> Players { get => _players.ToList(); }
         public long PotAmount { get => _potAmount; }
+        public long CurrentBetAmount { get => _currentBetAmount; }
         public Guid GameId { get => _gameId; }
         public Guid Id { get=> _id; }
 
@@ -41,7 +43,9 @@ namespace teen_patti.common.Models.Engine
         {
             this._deck = builder.Deck.ToList();
             this._players = builder.Players.ToList();
-            this._transitionMove = builder.TransitionMove ?? MoveFactory.GetNullMove(this);
+            this._potAmount = builder.PotAmount;
+            this._currentBetAmount = builder.CurrentBetAmount;
+            this._transitionMove = builder.TransitionMove ?? new NullMove(this);
             this._currentPlayer = builder.CurrentPlayer;
             this._gameId = builder.GameId;
             this._id = Guid.NewGuid();

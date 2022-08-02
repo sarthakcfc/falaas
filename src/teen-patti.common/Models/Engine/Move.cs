@@ -28,6 +28,13 @@ namespace teen_patti.common.Models.Engine
             return builder.Build();
         }
 
+        protected bool validateHands()
+        {
+            foreach (var player in _state.Players)
+                if (player.Hand.Count < 3)
+                    return false;
+            return true;
+        }
     }
     public sealed class Deal : Move
     {
@@ -48,25 +55,52 @@ namespace teen_patti.common.Models.Engine
             
             players[newPlayer.Ordinal - 1] = newPlayer;
 
-            builder.SetCurrentPlayer(_state.GetNextPlayer());
-            builder.SetDeck(deck.ToList());
-            builder.SetPlayers(players);
-            builder.SetMoveTransition(this);
+            builder.SetCurrentPlayer(_state.GetNextPlayer())
+                .SetDeck(deck.ToList())
+                .SetPlayers(players)
+                .SetMoveTransition(this);
             
             return builder.Build();
         }
     }
-    public sealed class BlindBet : Move
+    public sealed class Bet : Move
     {
-        public BlindBet(GameState state) : base(state)
+        public Bet(GameState state) : base(state)
         {
         }
-    }
-    public sealed class SeenBet : Move
-    {
-        public SeenBet(GameState state) : base(state)
+        public override GameState Execute() => throw new InvalidOperationException("Cannot execute a Bet move without a bet!");
+
+        public GameState Execute(long betAmount)
         {
+            if(!validateHands())
+                throw new InvalidOperationException("Cannot Make a bet without first dealing all the cards!");
+            if(!validateBet(betAmount))
+                throw new InvalidOperationException($"The attemted bet amount of {betAmount} is less than the current bet amount {_state.CurrentBetAmount}!");
+
+            Builder builder = new Builder();
+
+            var deck = new Stack<Card>(_state.Deck);
+            var players = _state.Players.ToList();
+            var currentPlayer = _state.CurrentPlayer;
+
+            //Decrease currency amount from player
+            var newPlayer = new Player(currentPlayer.Id, 
+                currentPlayer.Name, 
+                currentPlayer.Hand, 
+                currentPlayer.Ordinal);
+            players[newPlayer.Ordinal - 1] = newPlayer;
+
+            //Add to pot amount with the builder
+            builder.SetCurrentPlayer(_state.GetNextPlayer())
+                .SetDeck(deck.ToList())
+                .SetPlayers(players)
+                .SetMoveTransition(this)
+                .SetPotAmount(_state.PotAmount + betAmount)
+                .SetBetAmount(betAmount);
+
+            return builder.Build();
         }
+        private bool validateBet(long betAmount) => betAmount < State.CurrentBetAmount; 
     }
     public sealed class SeeCards : Move
     {
@@ -92,10 +126,10 @@ namespace teen_patti.common.Models.Engine
 
 
             //builder assignments
-            builder.SetCurrentPlayer(_state.GetNextPlayer());
-            builder.SetDeck(deck.ToList());
-            builder.SetPlayers(players);
-            builder.SetMoveTransition(this);
+            builder.SetCurrentPlayer(_state.CurrentPlayer)
+                .SetDeck(deck.ToList())
+                .SetPlayers(players)
+                .SetMoveTransition(this);
             return builder.Build();
 
         }
@@ -108,29 +142,6 @@ namespace teen_patti.common.Models.Engine
         public override GameState Execute()
         {
             throw new InvalidOperationException("Cannot execute a null move");
-        }
-    }
-    public static class MoveFactory
-    {
-        internal static Move GetNullMove(GameState state)
-        {
-            return new NullMove(state);
-        }
-
-        public static Move CreateMove(GameState state, string moveType)
-        {
-            //Validate that Every player has 3 cards per hand else keep dealing
-            if(String.IsNullOrEmpty(moveType))
-                return new Deal(state);
-
-            switch (moveType)
-            {
-                case nameof(SeeCards):
-                    return new SeeCards(state);
-                default:
-                    throw new ArgumentException("Invalid Input");
-            }
-            //Calculate possible moves for player
         }
     }
 }

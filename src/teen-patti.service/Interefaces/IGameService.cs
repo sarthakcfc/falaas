@@ -13,6 +13,6 @@ namespace teen_patti.service.Interefaces
         Task<common.Models.ViewModel.GameStateView> Deal(Guid gameId, int handSize);
         Task<common.Models.ViewModel.GameStateView> GetState(Guid gameId, Guid playerId);
         Task<common.Models.ViewModel.GameStateView> SeeHand(Guid gameId, Guid playerId);
-        Task<common.Models.ViewModel.GameStateView> Bet(Guid gameId, Guid playerId);
+        Task<common.Models.ViewModel.GameStateView> Bet(Guid gameId, Guid playerId, long betAmount);
     }
 }

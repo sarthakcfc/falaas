@@ -8,6 +8,7 @@ namespace teen_patti.common.Models.Engine
         private readonly Guid _id;
         private readonly string _name;
         private readonly int _ordinal;
+        private readonly long _currencyAmount;
         private IReadOnlyCollection<Card> _hand;
 
         public ICollection<Card> Hand { get => _hand.ToList(); }

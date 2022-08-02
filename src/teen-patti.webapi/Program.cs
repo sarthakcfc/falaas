@@ -52,7 +52,7 @@ app.MapPost("teenpatti/intialize/{playerId}",
     .WithName("Initialize")
     .WithTags("TeenPatti");
 
-app.MapPost("teenpatti/{gameId}/player/add", 
+app.MapPost("teenpatti/{gameId}/player/{playerId}/add", 
     async ([FromQuery] Guid gameId, [FromQuery] Guid playerId, IGameService service) => 
         await service.AddPlayer(gameId, playerId))
     .WithName("AddPlayer")
@@ -77,8 +77,8 @@ app.MapGet("teenpatti/{gameId}/player/{playerId}/hand/see",
     .WithTags("TeenPatti");
 
 app.MapPost("teenpatti/{gameId}/player/{playerId}/bet",
-    async ([FromQuery] Guid gameId, [FromQuery] Guid playerId, IGameService service) =>
-        await service.Bet(gameId, playerId))
+    async ([FromQuery] Guid gameId, [FromQuery] Guid playerId, [FromQuery] long betAmount, IGameService service) =>
+        await service.Bet(gameId, playerId, betAmount))
     .WithName("SeenBet")
     .WithTags("TeenPatti");
 #endregion
