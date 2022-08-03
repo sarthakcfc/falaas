@@ -13,6 +13,8 @@ namespace teen_patti.common.Models.ViewModel
         public Guid CurrentPlayerId { get; set; }
         public PlayerView Player { get; set; }
         public ICollection<PlayerView> Opponents { get; set; }
+        public long CurrentBetAmount { get; set; }
+        public long PotAmount { get; set; }
     }
     public static class GameStateViewModelExtensions
     {
@@ -22,6 +24,8 @@ namespace teen_patti.common.Models.ViewModel
             GameId = state.GameId,
             CurrentPlayerId = state.CurrentPlayer.Id,
             Player = requestedPlayer,
+            PotAmount = state.PotAmount,
+            CurrentBetAmount = state.CurrentBetAmount,
             Opponents = state.Players.Where(x => x.Id != state.CurrentPlayer.Id).Select(x => new PlayerView(x)).ToList()
         };
         public static GameStateView MapToPlayerView(this Persistence.GameState state, PlayerView requestedPlayer) => new GameStateView()
@@ -29,6 +33,8 @@ namespace teen_patti.common.Models.ViewModel
             GameId = state.GameId,
             CurrentPlayerId = state.CurrentPlayer.Id,
             Player = requestedPlayer,
+            PotAmount = state.PotAmount,
+            CurrentBetAmount = state.CurrentBetAmount,
             Opponents = state.Players.Where(x => x.Id != requestedPlayer.Id).Select(x => new PlayerView(x)).ToList()
         };
     }
