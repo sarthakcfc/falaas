@@ -100,7 +100,7 @@ namespace teen_patti.common.Models.Engine
 
             return builder.Build();
         }
-        private bool validateBet(long betAmount) => betAmount < State.CurrentBetAmount; 
+        private bool validateBet(long betAmount) => betAmount > State.CurrentBetAmount; 
     }
     public sealed class SeeCards : Move
     {
