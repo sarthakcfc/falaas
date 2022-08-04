@@ -75,7 +75,10 @@ namespace teen_patti.common.Models.Engine
             if(!validateHands())
                 throw new InvalidOperationException("Cannot Make a bet without first dealing all the cards!");
             if(!validateBet(betAmount))
-                throw new InvalidOperationException($"The attemted bet amount of {betAmount} is less than the current bet amount {_state.CurrentBetAmount}!");
+                throw new InvalidOperationException($"The attempted bet amount of {betAmount} is less than the current bet amount {_state.CurrentBetAmount}!");
+            //validate that seen bets are at least twice the size
+            if (!validateSeenBetAmount(betAmount))
+                throw new InvalidOperationException($"The seen bet amount {betAmount} needs to be twice the amount of {_state.CurrentBetAmount}");
 
             Builder builder = new Builder();
 
@@ -96,11 +99,14 @@ namespace teen_patti.common.Models.Engine
                 .SetPlayers(players)
                 .SetMoveTransition(this)
                 .SetPotAmount(_state.PotAmount + betAmount)
-                .SetBetAmount(betAmount);
+                .SetBetAmount(_state.CurrentPlayer.Hand.ToList()[0].IsVisible ? (long)Math.Floor(betAmount / 2d) : betAmount);
 
             return builder.Build();
         }
-        private bool validateBet(long betAmount) => betAmount > State.CurrentBetAmount; 
+
+        private bool validateSeenBetAmount(long betAmount) => !_state.CurrentPlayer.Hand.ToList()[0].IsVisible || (_state.CurrentPlayer.Hand.ToList()[0].IsVisible && betAmount >= _state.CurrentBetAmount * 2);
+
+        private bool validateBet(long betAmount) => betAmount >= State.CurrentBetAmount; 
     }
     public sealed class SeeCards : Move
     {

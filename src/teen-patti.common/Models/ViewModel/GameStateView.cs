@@ -26,7 +26,7 @@ namespace teen_patti.common.Models.ViewModel
             Player = requestedPlayer,
             PotAmount = state.PotAmount,
             CurrentBetAmount = state.CurrentBetAmount,
-            Opponents = state.Players.Where(x => x.Id != state.CurrentPlayer.Id).Select(x => new PlayerView(x)).ToList()
+            Opponents = state.Players.Where(x => x.Id != requestedPlayer.Id).Select(x => new PlayerView(x)).ToList()
         };
         public static GameStateView MapToPlayerView(this Persistence.GameState state, PlayerView requestedPlayer) => new GameStateView()
         {
