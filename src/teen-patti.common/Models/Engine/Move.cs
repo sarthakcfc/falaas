@@ -99,14 +99,14 @@ namespace teen_patti.common.Models.Engine
                 .SetPlayers(players)
                 .SetMoveTransition(this)
                 .SetPotAmount(_state.PotAmount + betAmount)
-                .SetBetAmount(betAmount);
+                .SetBetAmount(_state.CurrentPlayer.Hand.ToList()[0].IsVisible ? (long)Math.Floor(betAmount / 2d) : betAmount);
 
             return builder.Build();
         }
 
-        private bool validateSeenBetAmount(long betAmount) => _state.CurrentPlayer.Hand.ToList()[0].IsVisible && betAmount >= _state.CurrentBetAmount * 2;
+        private bool validateSeenBetAmount(long betAmount) => !_state.CurrentPlayer.Hand.ToList()[0].IsVisible || (_state.CurrentPlayer.Hand.ToList()[0].IsVisible && betAmount >= _state.CurrentBetAmount * 2);
 
-        private bool validateBet(long betAmount) => betAmount > State.CurrentBetAmount; 
+        private bool validateBet(long betAmount) => betAmount >= State.CurrentBetAmount; 
     }
     public sealed class SeeCards : Move
     {
